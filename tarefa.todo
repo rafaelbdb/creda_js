@@ -1,0 +1,40 @@
+Segue a tua tarefa da semana:
+Vc deve fazer um controle de receita e despesas, com login
+Se possível, ter um painel que mostre o saldo atual e o valor médio gasto por mês
+
+Regras:
+A linguagem vc escolhe, porém vc tem 40 horas pra fazer (4 HR vc deve usar planejando, 36 hs desenvolvimento)
+
+
+Brainstorm:
+[ ] Já que o email é algo (teoricamente) único, será usado como chave pra TUDO
+[ ] Usar o recurso "localStorage" para guardar as infos
+[ ] Quando o usuário NÃO está logado, exibir Form de Login com botão para ver o Form de cadastro
+[ ] Quando o usuário ESTÁ logado, exibir título "Bem-vindo <NOME> + botão Sair" e o form + tabela de Movimentações
+    Usuário:
+        [ ] Form Cadastro (não será permitido editar/deletar)
+            [ ] Nome
+            [ ] Email
+            [ ] Senha
+            [ ] Botão Cadastrar (realiza o cadastro)
+            [ ] Botão Cancelar (vai para o login)
+        [ ] Form Login
+            [ ] Email
+            [ ] Senha
+            [ ] Botão Entrar (realiza o login)
+            [ ] Botão Novo (vai para o cadastro)
+    Movimentação:
+        [ ] IMPORTANTE! Vincular o Email do usuário logado
+        [ ] Colocar OBS: "Use valores NEGATIVOS para saídas"
+        [ ] Form Cadastro/Edição
+            [ ] Valor
+            [ ] Descrição
+            [ ] Botão Registrar (se cadastrando)
+            [ ] Botão Alterar (se editando)
+        [ ] Tabela com Todas
+            [ ] Valor
+            [ ] Descrição
+            [ ] Botão Alterar
+            [ ] Botão Deletar
+        [ ] Saldo Total
+        [ ] Média de Despesas
