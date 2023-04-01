@@ -104,7 +104,7 @@ function cadastraUsuario(event) {
     msg.innerText = '';
 
     if (validaFormUsuario()) {
-        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
         //   const hashSenha = hashSenha(cadastraSenha.value);
         const novoUsuario = {
             [cadastraEmail.value]: {
@@ -115,7 +115,7 @@ function cadastraUsuario(event) {
                 saldo: saldoInicial.value || 0.0,
             },
         };
-        debugger;
+
         try {
             if (usuarios[cadastraEmail.value]) {
                 msg.innerText = 'Usuário já possui cadastro!';
@@ -124,8 +124,11 @@ function cadastraUsuario(event) {
                 return mostraLogin();
             }
 
-            usuarios.push(novoUsuario);
-            if (usuarios[novoUsuario[cadastraEmail.value]]) {
+            // usuarios.push(novoUsuario);
+            const usuariosComNovo = Object.assign({}, usuarios, novoUsuario);
+            localStorage.setItem('usuarios', JSON.stringify(usuariosComNovo));
+            usuarios = JSON.parse(localStorage.getItem('usuarios'));
+            if (usuarios[cadastraEmail.value]) {
                 msg.innerText = 'Usuário cadastrado com sucesso!';
                 console.log('Usuário cadastrado com sucesso!');
 

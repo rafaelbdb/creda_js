@@ -1,0 +1,59 @@
+/*
+ * Técnica do Rubber Duck - o Pato de Borracha
+ * 
+ * Descreva seu problema do jeito MAIS EXTREMAMENTE SIMPLIFICADO POSSÍVEL
+ * como se estivesse descrevendo ele para alguém que não entende nada do assunto.
+ * Pode ser um objeto inanimado, tipo um pato de borracha.
+ */
+
+Passo 1: 
+    Entenda `EXATAMENTE` o quê está sendo pedido.
+Passo 2: 
+    Planeje os vários passos necessários para que,
+    Dado um valor X, seja retornado um resultado Y.
+Passo 3:
+    Divida o problema em partes menores que você possa resolver facilmente.
+
+Descrição suscinta do problema:
+    [-] Não consigo encontrar um usuário cadastrado usando seu email como chave diretamente.
+
+Pistas e outros detalhes:
+    [ ] `usuarios` está em forma de ARRAY, colocando índices numéricos como chave.
+
+Possíveis soluções (Brainstorm):
+    [+] Transformar `usuarios` em JSON
+    [+] Passar o array inteiro por um filtro para trazer quem tem o email
+    [+] 
+
+✄ -----------------------
+Debug:
+    - Abra o Navegador e acesse a View 
+        Abra o DevTools, verificando se está tudo correto nas guias:
+            - Console: Mostra algum erro relevante?
+            - Network -> Clique na URL desejada
+                Guia "Headers":
+                    - General v
+                        + Request URL (endereço chamado)
+                        + Request Method (GET/POST)
+                        Status Code:
+                            + 200 OK
+                            x 400 Not Found (verifique se os `caminhos` estão digitados corretamente)
+                            x 500 Server Error (verifique o log de erros `.../logs/php-error.log`)
+                    - Request Headers v
+                        + Referer (url "pai", que chamou a url em questão)
+        Guia "Payload":
+            + Estão sendo passados os parâmetros e valores corretos?
+        Sources:
+            + Crie e caminhe pelos Breakpoints criados com a palavra "debugger" no código JavaScript
+
+    - Ligue a ferramenta de Debug (XDebug, por exemplo) do seu IDE e coloque Breakpoints no código que criou:
+        -> JavaScript (com a palavra "debugger"), View e Controller.
+        -> Verifique que esteja passando pela sequência que se espera, e os valores registrados nas variáveis./**
+
+    - Ative o "Extrato de Versão" e verifique se o arquivo gerado mostra algum erro.
+        -> Copie a Query desejada, cole-a no seu gerenciador de Banco de Dados e rode-a para verificar o resultado retornado.
+
+============
+✘ RASCUNHO
+
+
