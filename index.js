@@ -364,35 +364,32 @@ function listaMovs() {
         if (movsLogado.length === 0) {
             return false;
         }
-
-        const linha = document.createElement('tr');
-        const valor = document.createElement('td');
-        const descricao = document.createElement('td');
-        const celulaAlterar = document.createElement('td');
-        const celulaDeletar = document.createElement('td');
-        const alterar = document.createElement('button');
-        const deletar = document.createElement('button');
-        const lapis = document.createElement('img');
-        const lixeira = document.createElement('img');
-
-        lapis.src = 'pencil.png';
-        lixeira.src = 'trash.png';
-        celulaAlterar.id = 'alterar';
-        celulaDeletar.id = 'deletar';
-        alterar.type = 'submit';
-        deletar.type = 'submit';
-
-        // talvez precise mudar a definição pra ele saber qual o ID a editar/deletar
-        celulaAlterar.appendChild(alterar);
-        celulaDeletar.appendChild(deletar);
-        alterar.appendChild(lapis);
-        deletar.appendChild(lixeira);
-
-        alterar.addEventListener('click', alteraMov);
-        deletar.addEventListener('click', deletaMov);
-
-        // Só está exibindo a ÚLTIMA
         movsLogado.forEach((m) => {
+            const linha = document.createElement('tr');
+            const valor = document.createElement('td');
+            const descricao = document.createElement('td');
+            const celulaAlterar = document.createElement('td');
+            const celulaDeletar = document.createElement('td');
+            const alterar = document.createElement('button');
+            const deletar = document.createElement('button');
+            const lapis = document.createElement('img');
+            const lixeira = document.createElement('img');
+
+            lapis.src = 'pencil.png';
+            lixeira.src = 'trash.png';
+            celulaAlterar.id = 'alterar';
+            celulaDeletar.id = 'deletar';
+            alterar.type = 'submit';
+            deletar.type = 'submit';
+
+            celulaAlterar.appendChild(alterar);
+            celulaDeletar.appendChild(deletar);
+            alterar.appendChild(lapis);
+            deletar.appendChild(lixeira);
+
+            alterar.addEventListener('click', alteraMov);
+            deletar.addEventListener('click', deletaMov);
+
             valor.innerText = m['valor'];
             descricao.innerText = m['descricao'];
             linha.appendChild(valor);
