@@ -310,6 +310,8 @@ function alteraMov(event) {
     event.preventDefault();
     tituloMov.innerText = 'Alterar Movimentação';
 
+    // Captura dados da mov selecionada
+
     if (validaFormMov()) {
         try {
             let email = localStorage.getItem('logado');
@@ -364,7 +366,7 @@ function listaMovs() {
         if (movsLogado.length === 0) {
             return false;
         }
-        movsLogado.forEach((m) => {
+        movsLogado.forEach((m, i) => {
             const linha = document.createElement('tr');
             const valor = document.createElement('td');
             const descricao = document.createElement('td');
@@ -377,8 +379,8 @@ function listaMovs() {
 
             lapis.src = 'pencil.png';
             lixeira.src = 'trash.png';
-            celulaAlterar.id = 'alterar';
-            celulaDeletar.id = 'deletar';
+            celulaAlterar.id = 'alterar_' + i;
+            celulaDeletar.id = 'deletar_' + i;
             alterar.type = 'submit';
             deletar.type = 'submit';
 
@@ -399,6 +401,8 @@ function listaMovs() {
             tabelaMovs.appendChild(linha);
         });
 
+        calculaSaldoTotal();
+        // calculaMediaDespesas();
         return true;
     } catch (error) {
         console.error(error);
@@ -427,6 +431,26 @@ function hashSenha(senha) {
     }
 
     return false;
+}
+
+function calculaSaldoTotal() {
+    try {
+        const logado = localStorage.getItem('logado');
+        const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+        const saldoAtual = parseFloat(usuarios[logado]['saldo']);
+        const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
+        // debugger
+        let novoSaldo = movsLogado.reduce(
+            (acc, item) => acc + parseFloat(item['valor']),
+            saldoAtual,
+        );
+        console.log(parseFloat(novoSaldo))
+        saldoTotal.innerText += ' ' + novoSaldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
+        return novoSaldo;
+    } catch (error) {
+        console.error(error);
+    }
+    return 0.00;
 }
 
 function calculaMediaDespesas() {

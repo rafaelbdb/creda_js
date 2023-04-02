@@ -136,12 +136,10 @@ tr:nth-child(even) {
 }
 
 #saldoTotal:before {
-    content: 'Saldo Total: R$';
     text-align: left;
 }
 
 #mediaDespesas:before {
-    content: 'Média de despesas: R$';
     text-align: left;
 }
 
@@ -155,12 +153,11 @@ tr:nth-child(even) {
     text-align: center;
 }
 
-#alterar, #deletar {
+td[id^="alterar_"], td[id^="deletar_"] {
     zoom: 40%;
     background-position: center center;
 }
 
-#alterar>button, #deletar>button{
-    /* all: unset; */
-    margin-top: 10%;
+td[id^="alterar_"]>button, td[id^="deletar_"]>button{
+    width: 50%;
 }
