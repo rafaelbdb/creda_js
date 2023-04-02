@@ -1,4 +1,5 @@
 const titulo = document.getElementById('titulo');
+const sair = document.getElementById('sair');
 const formUsuario = document.getElementById('formUsuario');
 const cadastraNome = document.getElementById('cadastraNome');
 const cadastraEmail = document.getElementById('cadastraEmail');
@@ -13,23 +14,26 @@ const mostrarCadastroUsuario = document.getElementById(
     'mostrarCadastroUsuario',
 );
 const formMovimentacao = document.getElementById('formMovimentacao');
+const tituloMov = document.getElementById('tituloMov');
 const valor = document.getElementById('valor');
 const descricao = document.getElementById('descricao');
-const registrar = document.getElementById('registrar');
-const alterar = document.getElementById('alterar');
+const criar = document.getElementById('criar');
+// const alterar = document.getElementById('alterar');
 const obs = document.getElementById('obs');
 const idMov = document.getElementById('idMov');
+const divMovs = document.getElementById('divMovs');
 const tabelaMovs = document.getElementById('tabelaMovs');
 const saldoTotal = document.getElementById('saldoTotal');
 const mediaDespesas = document.getElementById('mediaDespesas');
 const msg = document.getElementById('msg');
 
+sair.addEventListener('click', logout);
 mostrarLogin.addEventListener('click', mostraLogin);
 mostrarCadastroUsuario.addEventListener('click', mostraCadastroUsuario);
 cadastrarUsuario.addEventListener('click', cadastraUsuario);
 entrar.addEventListener('click', login);
-registrar.addEventListener('click', registraMov);
-alterar.addEventListener('click', alteraMov);
+criar.addEventListener('click', criaMov);
+// alterar.addEventListener('click', alteraMov);
 
 function validaFormUsuario() {
     let nome = cadastraNome.value.trim();
@@ -59,6 +63,7 @@ function validaFormUsuario() {
         valido = false;
     }
 
+    msg.innerText = '';
     return valido;
 }
 
@@ -77,6 +82,7 @@ function validaFormLogin() {
         valido = false;
     }
 
+    msg.innerText = '';
     return valido;
 }
 
@@ -95,6 +101,7 @@ function validaFormMov() {
         valido = false;
     }
 
+    msg.innerText = '';
     return valido;
 }
 
@@ -111,7 +118,6 @@ function cadastraUsuario(event) {
                 nome: cadastraNome.value,
                 //   senha: hashSenha,
                 senha: cadastraSenha.value,
-                movs: {},
                 saldo: saldoInicial.value || 0.0,
             },
         };
@@ -119,8 +125,6 @@ function cadastraUsuario(event) {
         try {
             if (usuarios[cadastraEmail.value]) {
                 msg.innerText = 'Usuário já possui cadastro!';
-                console.log('Usuário já possui cadastro!');
-                console.log(`cadastraUsuario => mostraLogin()`);
                 return mostraLogin();
             }
 
@@ -130,9 +134,7 @@ function cadastraUsuario(event) {
             usuarios = JSON.parse(localStorage.getItem('usuarios'));
             if (usuarios[cadastraEmail.value]) {
                 msg.innerText = 'Usuário cadastrado com sucesso!';
-                console.log('Usuário cadastrado com sucesso!');
 
-                console.log(`cadastraUsuario => ${true}`);
                 return true;
             }
         } catch (error) {
@@ -141,7 +143,6 @@ function cadastraUsuario(event) {
         return false;
     }
 
-    console.log(`cadastraUsuario => ${false}`);
     return false;
 }
 
@@ -163,15 +164,12 @@ function login(event) {
             if (existente && existente['senha'] == visitante['senha']) {
                 localStorage.setItem('logado', visitante['email']);
 
-                console.log(`login => mostraBemVindo(existente['nome'])`);
-                return mostraBemVindo(existente['nome']);
+                return mostraBemVindo();
             }
             msg.innerText =
                 !visitante['email'] || !visitante['senha']
                     ? 'Email e senha obrigatórios'
                     : 'Usuário não cadastrado!';
-            console.log(`login => ${msg.innerText}`);
-            console.log(`login => mostraCadastroUsuario()`);
             // return mostraCadastroUsuario();
             return false;
         } catch (error) {
@@ -179,7 +177,6 @@ function login(event) {
         }
     }
 
-    console.log(`login => ${false}`);
     return false;
 }
 
@@ -189,27 +186,21 @@ function logout(event) {
         localStorage.removeItem('logado');
         mostraLogin();
 
-        console.log(`logout => !verificaLogado()`);
         return !verificaLogado();
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`logout => ${false}`);
     return false;
 }
 
 function verificaLogado() {
     try {
-        console.log(
-            `verificaLogado => ${JSON.parse(localStorage.getItem('logado'))}`,
-        );
-        return JSON.parse(localStorage.getItem('logado'));
+        return localStorage.getItem('logado');
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`verificaLogado => ${false}`);
     return false;
 }
 
@@ -219,16 +210,15 @@ function mostraLogin() {
         formLogin.style.display = 'block';
         formUsuario.style.display = 'none';
         formMovimentacao.style.display = 'none';
+        sair.style.display = 'none';
         tabelaMovs.style.display = 'none';
 
         let exibindo = formLogin.offsetParent !== formUsuario.offsetParent;
-        console.log(`mostraLogin => ${exibindo}`);
         return exibindo;
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`mostraLogin => ${false}`);
     return false;
 }
 
@@ -238,134 +228,185 @@ function mostraCadastroUsuario() {
         formUsuario.style.display = 'block';
         formLogin.style.display = 'none';
         formMovimentacao.style.display = 'none';
+        sair.style.display = 'none';
         tabelaMovs.style.display = 'none';
 
         let exibindo = formLogin.offsetParent !== formUsuario.offsetParent;
-        console.log(`mostraCadastroUsuario => ${exibindo}`);
 
         return exibindo;
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`mostraCadastroUsuario => ${false}`);
     return false;
 }
 
-function mostraBemVindo(nome) {
+function mostraBemVindo() {
     try {
+        const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+        const email = localStorage.getItem('logado');
+        const nome = usuarios[email]['nome'];
+
         titulo.innerText = `Bem-vindo ${nome}!`;
         formUsuario.style.display = 'none';
         formLogin.style.display = 'none';
         formMovimentacao.style.display = 'block';
-        tabelaMovs.style.display = 'block';
+        sair.style.display = 'block';
+        tabelaMovs.style.display = 'contents';
 
-        console.log(`mostraBemVindo => ${true}`);
-        return true;
+        return listaMovs();
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`mostraBemVindo => ${false}`);
     return false;
 }
 
-function registraMov(event) {
+// funciona, mas tem alguma cagada por questão de assync ou alguma merda dessa
+function criaMov(event) {
     event.preventDefault();
     if (validaFormMov()) {
         try {
-            let email = JSON.parse(localStorage.getItem('logado'));
-            if (!email) {
-                mostraLogin();
-
-                console.log(`registraMov => ${false}`);
-                return false;
-            }
-            let usuarioLogado = JSON.parse(localStorage.getItem(email));
-            let movs = usuarioLogado['movs'] || [];
-            const nova = {
+            const logado = localStorage.getItem('logado');
+            const novaMov = {
                 valor: valor.value,
                 descricao: descricao.value,
             };
-            movs.push(nova);
-            localStorage.setItem(usuarioLogado['movs'], JSON.stringify(movs));
+            const todasMovs = JSON.parse(localStorage.getItem('movs'));
 
-            console.log(`registraMov => ${true}`);
+            if (todasMovs) {
+                if (todasMovs.hasOwnProperty(logado)) {
+                    todasMovs[logado].push(novaMov);
+                } else {
+                    todasMovs.push({ [logado]: novaMov });
+                }
+                localStorage.setItem('movs', JSON.stringify(todasMovs));
+            } else {
+                localStorage.setItem(
+                    'movs',
+                    JSON.stringify({ [logado]: novaMov }),
+                );
+            }
+
+            if (
+                Object.entries(JSON.parse(localStorage.getItem('movs'))[logado])
+                    .length === 0
+            ) {
+                return false;
+            }
+            let texto = valor.value >= 0.0 ? 'Receita' : 'Despesa';
+            texto += ' cadastrada com sucesso!';
+            msg.innerText = texto;
             return true;
         } catch (error) {
             console.error(error);
         }
     }
 
-    console.log(`registraMov => ${false}`);
     return false;
 }
 
 function alteraMov(event) {
     event.preventDefault();
+    tituloMov.innerText = 'Alterar Movimentação';
+
+    if (validaFormMov()) {
+        try {
+            let email = localStorage.getItem('logado');
+            let movs = JSON.parse(localStorage.getItem('movs')) || {};
+            const novaMov = {
+                [email]: {
+                    valor: valor.value,
+                    descricao: descricao.value,
+                },
+            };
+            const movsComNova = Object.assign({}, movs, novaMov);
+            localStorage.setItem('movs', JSON.stringify(movsComNova));
+
+            movs = JSON.parse(localStorage.getItem('movs'));
+            if (movs[email]) {
+                let texto = valor.value >= 0 ? 'Receita' : 'Despesa';
+                texto += ' cadastrada com sucesso!';
+                msg.innerText = texto;
+                return true;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    return false;
+}
+
+function deletaMov(event) {
+    event.preventDefault();
+    tituloMov.innerText = 'Alterar Movimentação';
+
     if (validaFormMov()) {
         try {
             let id = idMov.value;
             let email = JSON.parse(localStorage.getItem('logado'));
-            if (!email) {
-                mostraLogin();
 
-                console.log(`alteraMov => ${false}`);
-                return false;
-            }
-
-            console.log(`alteraMov => ${true}`);
             return true;
         } catch (error) {
             console.error(error);
         }
     }
 
-    console.log(`alteraMov => ${false}`);
     return false;
 }
 
 function listaMovs() {
     try {
-        let email = JSON.parse(localStorage.getItem('logado'));
-        if (!email) {
-            //   console.log(`listaMovs => ${!mostraLogin()}`);
-            return !mostraLogin();
+        let logado = localStorage.getItem('logado');
+        let movsLogado = JSON.parse(localStorage.getItem('movs'))[logado] || {};
+
+        if (movsLogado.length === 0) {
+            return false;
         }
-        let usuarioLogado = JSON.parse(localStorage.getItem(email));
-        let movs = usuarioLogado['movs'] || [];
 
-        if (movs) {
-            const linha = document.createElement('tr');
-            const valor = document.createElement('td');
-            const descricao = document.createElement('td');
-            const alterar = document.createElement('button');
-            const deletar = document.createElement('button');
-            const lapis = document.createElement('img');
-            const lixeira = document.createElement('img');
-            lapis.src = 'pencil.png';
-            lixeira.src = 'trash.png';
-            lapis.width = '40%';
-            lixeira.width = '40%';
-            alterar.appendChild(lapis);
-            deletar.appendChild(lixeira);
+        const linha = document.createElement('tr');
+        const valor = document.createElement('td');
+        const descricao = document.createElement('td');
+        const celulaAlterar = document.createElement('td');
+        const celulaDeletar = document.createElement('td');
+        const alterar = document.createElement('button');
+        const deletar = document.createElement('button');
+        const lapis = document.createElement('img');
+        const lixeira = document.createElement('img');
 
-            movs.forEach((m) => {
-                valor.innerText = m['valor'];
-                descricao.innerText = m['descricao'];
-                linha.appendChild(valor);
-                linha.appendChild(descricao);
-                tabelaMovs.appendChild(linha);
-            });
+        lapis.src = 'pencil.png';
+        lixeira.src = 'trash.png';
+        celulaAlterar.id = 'alterar';
+        celulaDeletar.id = 'deletar';
+        alterar.type = 'submit';
+        deletar.type = 'submit';
 
-            console.log(`listaMovs => ${true}`);
-            return true;
-        }
+        // talvez precise mudar a definição pra ele saber qual o ID a editar/deletar
+        celulaAlterar.appendChild(alterar);
+        celulaDeletar.appendChild(deletar);
+        alterar.appendChild(lapis);
+        deletar.appendChild(lixeira);
+
+        alterar.addEventListener('click', alteraMov);
+        deletar.addEventListener('click', deletaMov);
+
+        // Só está exibindo a ÚLTIMA
+        movsLogado.forEach((m) => {
+            valor.innerText = m['valor'];
+            descricao.innerText = m['descricao'];
+            linha.appendChild(valor);
+            linha.appendChild(descricao);
+            linha.appendChild(celulaAlterar);
+            linha.appendChild(celulaDeletar);
+            tabelaMovs.appendChild(linha);
+        });
+
+        return true;
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`listaMovs => ${false}`);
     return false;
 }
 
@@ -383,15 +424,11 @@ function hashSenha(senha) {
             .map((b) => b.toString(16).padStart(2, '0'))
             .join('');
 
-        console.log(`sha256 => ${sha256}`);
-        console.log(`hashArray => ${hashArray}`);
-        console.log(`hashHex => ${hashHex}`);
         return hashHex;
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`hashSenha => ${false}`);
     return false;
 }
 
@@ -401,7 +438,6 @@ function calculaMediaDespesas() {
         if (!email) {
             mostraLogin();
 
-            console.log(`calculaMediaDespesas => ${false}`);
             return false;
         }
         let usuarioLogado = JSON.parse(localStorage.getItem(email));
@@ -416,13 +452,11 @@ function calculaMediaDespesas() {
         });
         let media = total / qtd;
 
-        console.log(`calculaMediaDespesas => ${media}`);
         return media;
     } catch (error) {
         console.error(error);
     }
 
-    console.log(`calculaMediaDespesas => ${0.0}`);
     return 0.0;
 }
 
@@ -430,17 +464,11 @@ window.onload = () => {
     let formOculto = formLogin.style.display !== 'block';
     let logado = verificaLogado();
 
-    console.log(`onload: formLogin.style.display => ${formOculto}`);
-    console.log(`onload: logado => ${logado}`);
-
     if (!logado) {
-        console.log(`onload: !logado`);
         if (formOculto) {
-            console.log(`onload: mostraLogin()`);
             mostraLogin();
         }
     } else {
-        console.log(`onload: mostraBemVindo()`);
         mostraBemVindo();
     }
 };

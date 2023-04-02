@@ -1,62 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>CREDA - JS</title>
-</head>
-<body>
-    <h1 name="titulo" id="titulo"></h1>
-    <form action="" name="formUsuario" id="formUsuario">
-        <label for="cadastraNome">Nome:</label>
-        <input type="text" name="cadastraNome" id="cadastraNome" required><br />
-        <label for="cadastraEmail">Email:</label>
-        <input type="email" name="cadastraEmail" id="cadastraEmail" required><br />
-        <label for="cadastraSenha">Senha:</label>
-        <input type="password" name="cadastraSenha" id="cadastraSenha" required><br />
-        <label for="saldoInicial">Saldo Inicial:</label>
-        <input type="number" min="0.00" step="0.01" name="saldoInicial" id="saldoInicial" value="0.00" required><br />
-        <button type="button" name="cadastrarUsuario" id="cadastrarUsuario" value="cadastrar">Cadastrar</button>
-        <button type="button" name="mostrarLogin" id="mostrarLogin" value="cancelar">Cancelar</button>
-    </form>
-    
-    <form action="" name="formLogin" id="formLogin">
-        <label for="loginEmail">Email:</label>
-        <input type="email" name="loginEmail" id="loginEmail" required><br />
-        <label for="loginSenha">Senha:</label>
-        <input type="password" name="loginSenha" id="loginSenha" required><br />
-        <button type="button" name="entrar" id="entrar" value="entrar">Entrar</button>
-        <button type="button" name="mostrarCadastroUsuario" id="mostrarCadastroUsuario" value="novo">Novo</button>
-    </form>
-    
-    <form action="" name="formMovimentacao" id="formMovimentacao">
-        <label for="valor">Valor:</label>
-        <input type="number" name="valor" id="valor" required><br />
-        <label for="descricao">Descrição:</label>
-        <input type="text" name="descricao" id="descricao" required><br />
-        <button type="button" name="registrar" id="registrar" value="registrar">Registrar</button>
-        <button type="button" name="alterar" id="alterar" value="alterar">Alterar</button>
-        <!-- <input type="hidden" name="idMov" id="idMov" value=""> -->
-        <p name="obs" id="obs">*Use valores NEGATIVOS para registrar saídas.</p>
-    </form>
-    
-    <div name="tabelaMovs" id="tabelaMovs">
-        <table>
-            <tr>
-                <th>Valor</th>
-                <th>Descrição</th>
-                <th>Alterar</th>
-                <th>Deletar</th>
-            </tr>
-        </table>
-        <div name="saldoTotal" id="saldoTotal"></div>
-        <div name="mediaDespesas" id="mediaDespesas"></div>
-    </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>CREDA - JS</title>
+    </head>
+    <body>
+        <h1 name="titulo" id="titulo"></h1>
+        <button type="button" name="sair" id="sair" value="sair">Sair</button>
+        <form action="" name="formUsuario" id="formUsuario">
+            <label for="cadastraNome">Nome:</label>
+            <input
+                type="text"
+                name="cadastraNome"
+                id="cadastraNome"
+                required
+            /><br />
+            <label for="cadastraEmail">Email:</label>
+            <input
+                type="email"
+                name="cadastraEmail"
+                id="cadastraEmail"
+                required
+            /><br />
+            <label for="cadastraSenha">Senha:</label>
+            <input
+                type="password"
+                name="cadastraSenha"
+                id="cadastraSenha"
+                required
+            /><br />
+            <label for="saldoInicial">Saldo Inicial:</label>
+            <input
+                type="number"
+                step="0.01"
+                name="saldoInicial"
+                id="saldoInicial"
+                value="0.00"
+                required
+            /><br />
+            <button
+                type="button"
+                name="cadastrarUsuario"
+                id="cadastrarUsuario"
+                value="cadastrar"
+            >
+                Cadastrar
+            </button>
+            <button
+                type="button"
+                name="mostrarLogin"
+                id="mostrarLogin"
+                value="cancelar"
+            >
+                Cancelar
+            </button>
+        </form>
 
-    <div name="msg" id="msg"></div>
-    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/build/sha256.min.js"></script>
-    <script type="text/javascript" src="index.js"></script>
-</body>
+        <form action="" name="formLogin" id="formLogin">
+            <label for="loginEmail">Email:</label>
+            <input
+                type="email"
+                name="loginEmail"
+                id="loginEmail"
+                required
+            /><br />
+            <label for="loginSenha">Senha:</label>
+            <input
+                type="password"
+                name="loginSenha"
+                id="loginSenha"
+                required
+            /><br />
+            <button type="button" name="entrar" id="entrar" value="entrar">
+                Entrar
+            </button>
+            <button
+                type="button"
+                name="mostrarCadastroUsuario"
+                id="mostrarCadastroUsuario"
+                value="novo"
+            >
+                Novo
+            </button>
+        </form>
+
+        <form action="" name="formMovimentacao" id="formMovimentacao">
+            <h2 name="tituloMov" id="tituloMov">Cadastrar Movimentação</h2>
+            <label for="valor">Valor:</label>
+            <input type="number" name="valor" id="valor" required /><br />
+            <label for="descricao">Descrição:</label>
+            <input type="text" name="descricao" id="descricao" required /><br />
+            <button type="button" name="criar" id="criar" value="criar">
+                Criar
+            </button>
+            <input type="hidden" name="idMov" id="idMov" value="" />
+            <p name="obs" id="obs">
+                *Use valores NEGATIVOS para registrar saídas.
+            </p>
+        </form>
+
+        <div name="divMovs" id="divMovs">
+            <table>
+                <tbody name="tabelaMovs" id="tabelaMovs">
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descrição</th>
+                        <th>Alterar</th>
+                        <th>Deletar</th>
+                    </tr>
+                </tbody>
+            </table>
+            <div name="saldoTotal" id="saldoTotal"></div>
+            <div name="mediaDespesas" id="mediaDespesas"></div>
+        </div>
+
+        <div name="msg" id="msg"></div>
+        <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/build/sha256.min.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+    </body>
 </html>
