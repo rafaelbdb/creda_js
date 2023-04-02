@@ -468,18 +468,19 @@ function calculaSaldoTotal() {
 
 function calculaMediaDespesas() {
     try {
-        // debugger;
         const logado = localStorage.getItem('logado');
         const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
         let qtdDespesas = movsLogado.filter((obj) => {
-            if(obj && obj.valor){
-                return parseInt(obj.valor) < 0    
+            if (obj && obj.valor) {
+                return parseInt(obj.valor) < 0.0;
             }
         }).length;
         const somaDespesas = movsLogado.reduce((acc, curr) => {
             if (curr && curr['valor']) {
                 const valor = parseFloat(curr['valor']);
-                return valor < 0 ? acc + valor : acc;
+                return valor < 0.0 ? acc + valor : acc;
+            } else {
+                return acc;
             }
         }, 0.0);
         const media = somaDespesas / qtdDespesas;
