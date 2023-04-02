@@ -306,7 +306,7 @@ function criaMov(event) {
     return false;
 }
 
-function alteraMov(event) {
+function alteraMov(event, id) {
     event.preventDefault();
     tituloMov.innerText = 'Alterar Movimentação';
 
@@ -340,19 +340,21 @@ function alteraMov(event) {
     return false;
 }
 
-function deletaMov(event) {
+function deletaMov(event, id) {
     event.preventDefault();
-    tituloMov.innerText = 'Alterar Movimentação';
+    try {
+        const logado = localStorage.getItem('logado');
+        let movs = JSON.parse(localStorage.getItem('movs'));
+        delete movs[logado][id];
+        localStorage.setItem('movs', JSON.stringify(movs));
 
-    if (validaFormMov()) {
-        try {
-            let id = idMov.value;
-            let email = JSON.parse(localStorage.getItem('logado'));
-
+        movs = JSON.parse(localStorage.getItem('movs'));
+        if (!movs[logado][id]) {
+            msg.innerText = 'Movimentação deletada com sucesso!';
             return true;
-        } catch (error) {
-            console.error(error);
         }
+    } catch (error) {
+        console.error(error);
     }
 
     return false;
@@ -367,6 +369,9 @@ function listaMovs() {
             return false;
         }
         movsLogado.forEach((m, i) => {
+            if (!m) {
+                return;
+            }
             const linha = document.createElement('tr');
             const valor = document.createElement('td');
             const descricao = document.createElement('td');
@@ -389,8 +394,12 @@ function listaMovs() {
             alterar.appendChild(lapis);
             deletar.appendChild(lixeira);
 
-            alterar.addEventListener('click', alteraMov);
-            deletar.addEventListener('click', deletaMov);
+            celulaAlterar.addEventListener('click', (event) => {
+                alteraMov(event, i);
+            });
+            celulaDeletar.addEventListener('click', (event) => {
+                deletaMov(event, i);
+            });
 
             valor.innerText = m['valor'];
             descricao.innerText = m['descricao'];
@@ -439,10 +448,11 @@ function calculaSaldoTotal() {
         const usuarios = JSON.parse(localStorage.getItem('usuarios'));
         const saldoAtual = parseFloat(usuarios[logado]['saldo']);
         const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
-        const novoSaldo = movsLogado.reduce(
-            (acc, item) => acc + parseFloat(item['valor']),
-            saldoAtual,
-        );
+        const novoSaldo = movsLogado.reduce((acc, item) => {
+            return item && item['valor']
+                ? acc + parseFloat(item['valor'])
+                : acc;
+        }, saldoAtual);
         saldoTotal.innerText +=
             ' ' +
             novoSaldo.toLocaleString('pt-BR', {
@@ -458,14 +468,20 @@ function calculaSaldoTotal() {
 
 function calculaMediaDespesas() {
     try {
+        // debugger;
         const logado = localStorage.getItem('logado');
         const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
-        const qtdDespesas = movsLogado.filter(obj => parseInt(obj.valor) < 0).length;
-        // debugger;
+        let qtdDespesas = movsLogado.filter((obj) => {
+            if(obj && obj.valor){
+                return parseInt(obj.valor) < 0    
+            }
+        }).length;
         const somaDespesas = movsLogado.reduce((acc, curr) => {
-            const valor = parseFloat(curr.valor);
-            return valor < 0 ? acc + valor : acc;
-        }, 0);
+            if (curr && curr['valor']) {
+                const valor = parseFloat(curr['valor']);
+                return valor < 0 ? acc + valor : acc;
+            }
+        }, 0.0);
         const media = somaDespesas / qtdDespesas;
         mediaDespesas.innerText +=
             ' ' +

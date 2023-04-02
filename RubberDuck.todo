@@ -15,13 +15,13 @@ Passo 3:
     Divida o problema em partes menores que você possa resolver facilmente.
 
 Descrição suscinta do problema:
-    [-] Os `movs` não estão sendo registrados usando o email do usuário logado como chave principal
+    [-] 
 
 Pistas e outros detalhes:
-    [ ] O efeito desejado está sendo conseguido ao criar `usuarios`
+    [ ] 
 
 Possíveis soluções (Brainstorm):
-    [+] Copiar a mesma lógica que está sendo usada ao criar `usuarios` para ser usada também ao criar `movs`.
+    [+] 
 
 ✄ -----------------------
 Debug:

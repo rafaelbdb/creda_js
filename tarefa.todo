@@ -11,7 +11,7 @@ Brainstorm:
 [+] Já que o email é algo (teoricamente) único, será usado como chave pra TUDO
 [+] Usar o recurso "localStorage" para guardar as infos
 [+] Quando o usuário NÃO está logado, exibir Form de Login com botão para ver o Form de cadastro
-[ ] Quando o usuário ESTÁ logado, exibir título "Bem-vindo <NOME> + botão Sair" e o form + tabela de Movimentações
+[+] Quando o usuário ESTÁ logado, exibir título "Bem-vindo <NOME> + botão Sair" e o form + tabela de Movimentações
     Usuário:
         [+] Form Cadastro (não será permitido editar/deletar)
             [+] Nome
@@ -26,17 +26,18 @@ Brainstorm:
             [+] Botão Entrar (realiza o login)
             [+] Botão Novo (vai para o cadastro)
     Movimentação:
-        [ ] IMPORTANTE! Vincular o Email do usuário logado
+        [+] IMPORTANTE! Vincular o Email do usuário logado
         [+] Colocar OBS: "Use valores NEGATIVOS para saídas"
-        [ ] Form Cadastro/Edição
-            [ ] Valor
-            [ ] Descrição
-            [ ] Botão Registrar (se cadastrando)
-            [ ] Botão Alterar (se editando)
-        [ ] Tabela com Todas
-            [ ] Valor
-            [ ] Descrição
+        [+] Form Cadastro
+            [+] Valor
+            [+] Descrição
+            [+] Botão Registrar (se cadastrando)
+            [+] Botão Alterar (se editando)
+            [ ] Usar o mesmo form para Alterar
+        [+] Tabela com Todas
+            [+] Valor
+            [+] Descrição
             [ ] Botão Alterar
             [ ] Botão Deletar
-        [ ] Saldo Total
-        [ ] Média de Despesas
+        [+] Saldo Total
+        [+] Média de Despesas
