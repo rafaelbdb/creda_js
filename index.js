@@ -402,7 +402,7 @@ function listaMovs() {
         });
 
         calculaSaldoTotal();
-        // calculaMediaDespesas();
+        calculaMediaDespesas();
         return true;
     } catch (error) {
         console.error(error);
@@ -439,45 +439,44 @@ function calculaSaldoTotal() {
         const usuarios = JSON.parse(localStorage.getItem('usuarios'));
         const saldoAtual = parseFloat(usuarios[logado]['saldo']);
         const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
-        // debugger
-        let novoSaldo = movsLogado.reduce(
+        const novoSaldo = movsLogado.reduce(
             (acc, item) => acc + parseFloat(item['valor']),
             saldoAtual,
         );
-        console.log(parseFloat(novoSaldo))
-        saldoTotal.innerText += ' ' + novoSaldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
+        saldoTotal.innerText +=
+            ' ' +
+            novoSaldo.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+            });
         return novoSaldo;
     } catch (error) {
         console.error(error);
     }
-    return 0.00;
+    return 0.0;
 }
 
 function calculaMediaDespesas() {
     try {
-        let email = JSON.parse(localStorage.getItem('logado'));
-        if (!email) {
-            mostraLogin();
-
-            return false;
-        }
-        let usuarioLogado = JSON.parse(localStorage.getItem(email));
-        let movs = usuarioLogado['movs'] || [];
-        let qtd = 0;
-        let total = 0;
-        movs.forEach((m) => {
-            if (m < 0) {
-                total += m;
-                qtd++;
-            }
-        });
-        let media = total / qtd;
-
+        const logado = localStorage.getItem('logado');
+        const movsLogado = JSON.parse(localStorage.getItem('movs'))[logado];
+        const qtdDespesas = movsLogado.filter(obj => parseInt(obj.valor) < 0).length;
+        // debugger;
+        const somaDespesas = movsLogado.reduce((acc, curr) => {
+            const valor = parseFloat(curr.valor);
+            return valor < 0 ? acc + valor : acc;
+        }, 0);
+        const media = somaDespesas / qtdDespesas;
+        mediaDespesas.innerText +=
+            ' ' +
+            media.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+            });
         return media;
     } catch (error) {
         console.error(error);
     }
-
     return 0.0;
 }
 
