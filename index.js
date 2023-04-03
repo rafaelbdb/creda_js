@@ -306,35 +306,55 @@ function criaMov(event) {
     return false;
 }
 
-function alteraMov(event, id) {
+function formMovAltera(event, id) {
     event.preventDefault();
-    tituloMov.innerText = 'Alterar Movimentação';
+    // debugger
+    const logado = localStorage.getItem('logado');
+    const todosMovs = JSON.parse(localStorage.getItem('movs'));
+    const movsLogado = todosMovs[logado];
+    const movAlterar = movsLogado[id];
+    valor.value = movAlterar['valor'];
+    descricao.value = movAlterar['descricao'];
+    criar.innerText = 'Alterar';
+    criar.value = 'alterar';
+    criar.removeEventListener('click', criaMov);
+    criar.addEventListener('click', (event) => {
+        alteraMov(event, id, logado, todosMovs, movsLogado, movAlterar);
+    });
+}
 
-    // Captura dados da mov selecionada
-
-    if (validaFormMov()) {
-        try {
-            let email = localStorage.getItem('logado');
-            let movs = JSON.parse(localStorage.getItem('movs')) || {};
-            const novaMov = {
-                [email]: {
-                    valor: valor.value,
-                    descricao: descricao.value,
-                },
+function alteraMov(event, id, logado, todosMovs, movsLogado, movAlterar) {
+    event.preventDefault();
+    try {
+        // debugger
+        if (validaFormMov()) {
+            const novosDados = {
+                valor: valor.value,
+                descricao: descricao.value,
             };
-            const movsComNova = Object.assign({}, movs, novaMov);
-            localStorage.setItem('movs', JSON.stringify(movsComNova));
+            movAlterar['valor'] = novosDados['valor'];
+            movAlterar['descricao'] = novosDados['descricao'];
+            movsLogado[id] = movAlterar;
+            todosMovs[logado] = movsLogado;
+            localStorage.setItem('movs', JSON.stringify(todosMovs));
 
-            movs = JSON.parse(localStorage.getItem('movs'));
-            if (movs[email]) {
-                let texto = valor.value >= 0 ? 'Receita' : 'Despesa';
-                texto += ' cadastrada com sucesso!';
-                msg.innerText = texto;
+            // busca de novo a movimentação alterada
+            const movAlterado = JSON.parse(localStorage.getItem('movs'))[
+                logado
+            ][id];
+            if (
+                movAlterado['valor'] === novosDados['valor'] &&
+                movAlterado['descricao'] === novosDados['descricao']
+            ) {
+                msg.innerText = 'Movimentação alterada com sucesso!';
+                criar.removeEventListener('click', alteraMov);
+                criar.addEventListener('click', criaMov);
+                mostraBemVindo();
                 return true;
             }
-        } catch (error) {
-            console.error(error);
         }
+    } catch (error) {
+        console.error(error);
     }
 
     return false;
@@ -360,14 +380,28 @@ function deletaMov(event, id) {
     return false;
 }
 
+function limpaTabelaMovs() {
+    const tabela = document.getElementById('tabelaMovs');
+    const rows = tabela.rows;
+
+    for (let i = rows.length - 1; i >= 1; i--) {
+        tabela.deleteRow(i);
+    }
+    saldoTotal.innerText = 'Saldo Total:';
+    mediaDespesas.innerText = 'Média de despesas:';
+}
+
 function listaMovs() {
     try {
-        let logado = localStorage.getItem('logado');
-        let movsLogado = JSON.parse(localStorage.getItem('movs'))[logado] || {};
+        const logado = localStorage.getItem('logado');
+        const movsLogado =
+            JSON.parse(localStorage.getItem('movs'))[logado] || {};
 
-        if (movsLogado.length === 0) {
+        if (!Array.isArray(movsLogado) || movsLogado.length === 0) {
             return false;
         }
+
+        limpaTabelaMovs();
         movsLogado.forEach((m, i) => {
             if (!m) {
                 return;
@@ -395,7 +429,7 @@ function listaMovs() {
             deletar.appendChild(lixeira);
 
             celulaAlterar.addEventListener('click', (event) => {
-                alteraMov(event, i);
+                formMovAltera(event, i);
             });
             celulaDeletar.addEventListener('click', (event) => {
                 deletaMov(event, i);
