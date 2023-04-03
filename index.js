@@ -212,6 +212,8 @@ function mostraLogin() {
         formMovimentacao.style.display = 'none';
         sair.style.display = 'none';
         tabelaMovs.style.display = 'none';
+        saldoTotal.style.display = 'none';
+        mediaDespesas.style.display = 'none';
 
         let exibindo = formLogin.offsetParent !== formUsuario.offsetParent;
         return exibindo;
@@ -230,6 +232,8 @@ function mostraCadastroUsuario() {
         formMovimentacao.style.display = 'none';
         sair.style.display = 'none';
         tabelaMovs.style.display = 'none';
+        saldoTotal.style.display = 'none';
+        mediaDespesas.style.display = 'none';
 
         let exibindo = formLogin.offsetParent !== formUsuario.offsetParent;
 
